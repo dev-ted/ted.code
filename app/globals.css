@@ -1,0 +1,241 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Updated design system with cyan as primary in both light and dark mode */
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 0%);
+  --card: hsl(0 0% 98%);
+  --card-foreground: hsl(0 0% 0%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 0%);
+  --primary: rgb(182, 19, 98);
+  --primary-foreground: rgb(10, 3, 3);
+  --secondary: rgb(5, 1, 1);
+  --secondary-foreground: hsl(0 0% 0%);
+  --muted: hsl(187 12% 94%);
+  --muted-foreground: hsl(0 0% 45%);
+  --accent: rgb(241, 34, 145);
+  --accent-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(187 15% 85%);
+  --input: hsl(187 15% 85%);
+  --ring: rgb(199, 31, 112);
+  --radius: 0.75rem;
+  --sidebar: hsl(187 10% 97%);
+  --sidebar-foreground: hsl(0 0% 0%);
+  --sidebar-primary: rgb(240, 36, 146);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: rgb(240, 36, 145);
+  --sidebar-accent-foreground: hsl(0 0% 100%);
+  --sidebar-border: hsl(187 15% 85%);
+  --sidebar-ring: rgb(224, 8, 167);
+  --chart-1: hsl(187 100% 42%);
+  --chart-2: hsl(187 75% 55%);
+  --chart-3: hsl(187 60% 65%);
+  --chart-4: hsl(200 85% 50%);
+  --chart-5: hsl(175 70% 48%);
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 2px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.05;
+  --shadow-color: #000000;
+}
+
+@theme inline {
+  /* Updated font-sans and font-mono to use IBM Plex */
+  --font-sans: "IBM Plex Sans", "IBM Plex Sans Fallback", sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
+  --font-display: "Bebas Neue", "Bebas Neue Fallback", sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-serif: "Source Serif 4", "Source Serif 4 Fallback";
+  /* computed shadow variables below - do not modify */
+  --shadow-2xs: var(--shadow-x) var(--shadow-y)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-sm: var(--shadow-x) var(--shadow-y) calc(var(--shadow-blur) * 1.5) var(--shadow-spread)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-md: calc(var(--shadow-x) * 2) calc(var(--shadow-y) * 2) calc(var(--shadow-blur) * 3)
+    calc(var(--shadow-spread) - 1px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-lg: calc(var(--shadow-x) * 4) calc(var(--shadow-y) * 4) calc(var(--shadow-blur) * 5)
+    calc(var(--shadow-spread) - 3px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-xl: calc(var(--shadow-x) * 6) calc(var(--shadow-y) * 6) calc(var(--shadow-blur) * 7)
+    calc(var(--shadow-spread) - 5px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-2xl: calc(var(--shadow-x) * 8) calc(var(--shadow-y) * 8) calc(max(0px, var(--shadow-blur) * 9 - 8px))
+    calc(var(--shadow-spread) - 12px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 250%), transparent);
+  --shadow: var(--shadow-md);
+  --color-shadow-color: var(--shadow-color);
+  --shadow-opacity: var(--shadow-opacity);
+  --shadow-spread: var(--shadow-spread);
+  --shadow-blur: var(--shadow-blur);
+  --shadow-y: var(--shadow-y);
+  --shadow-x: var(--shadow-x);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    
+    height: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100vw;
+    height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(330, 85%, 54%) hsl(0, 0%, 95%);
+  }
+  /* Updated scrollbar colors for light mode - pink to match gradient theme */
+  body::-webkit-scrollbar {
+    width: 10px;
+  }
+  body::-webkit-scrollbar-track {
+    background: hsl(0, 0%, 95%);
+  }
+  body::-webkit-scrollbar-thumb {
+    background: hsl(330, 85%, 54%);
+    border-radius: 0.75rem;
+  }
+  body::-webkit-scrollbar-thumb:hover {
+    background: hsl(330, 85%, 48%);
+  }
+}
+
+/* Custom noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Grid background pattern */
+.grid-bg {
+  background-image: linear-gradient(to right, hsl(187 15% 90%) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(187 15% 90%) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Updated selection color to use cyan */
+::selection {
+  background: hsl(187 100% 42%);
+  color: hsl(0 0% 100%);
+}
+
+/* Updated dark mode with cyan primary and accent matching light mode */
+.dark {
+  --background: hsl(0 0% 7%);
+  --foreground: hsl(0 0% 100%);
+  --card: hsl(0 0% 10%);
+  --card-foreground: hsl(0 0% 100%);
+  --popover: hsl(0 0% 12%);
+  --popover-foreground: hsl(0 0% 100%);
+  --primary: rgb(184, 19, 99);
+  --primary-foreground: hsl(0 0% 7%);
+  --secondary: rgb(219, 211, 211);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(0 0% 15%);
+  --muted-foreground: hsl(0 0% 65%);
+  --accent: rgb(241, 33, 144);
+  --accent-foreground: hsl(0 0% 7%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 20%);
+  --input: hsl(0 0% 20%);
+  --ring: hsl(187 100% 42%);
+  --chart-1: hsl(187 100% 42%);
+  --chart-2: hsl(187 75% 55%);
+  --chart-3: hsl(187 60% 65%);
+  --chart-4: hsl(200 85% 50%);
+  --chart-5: hsl(175 70% 48%);
+  --sidebar: hsl(0 0% 10%);
+  --sidebar-foreground: hsl(0 0% 100%);
+  --sidebar-primary: hsl(187 100% 42%);
+  --sidebar-primary-foreground: hsl(0 0% 7%);
+  --sidebar-accent: hsl(187 100% 42%);
+  --sidebar-accent-foreground: hsl(0 0% 7%);
+  --sidebar-border: hsl(0 0% 20%);
+  --sidebar-ring: hsl(187 100% 42%);
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 2px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.05;
+  --shadow-color: #000000;
+}
+
+/* Dark mode scrollbar with pink/orange gradient accent */
+.dark body {
+  scrollbar-color: hsl(330, 85%, 60%) hsl(0, 0%, 7%);
+}
+
+.dark body::-webkit-scrollbar-track {
+  background: hsl(0, 0%, 7%);
+}
+
+.dark body::-webkit-scrollbar-thumb {
+  background: hsl(330, 85%, 60%);
+}
+
+.dark body::-webkit-scrollbar-thumb:hover {
+  background: hsl(330, 85%, 65%);
+}
+
+/* Dark mode grid with subtle cyan tint */
+.dark .grid-bg {
+  background-image: linear-gradient(to right, hsl(187 50% 15%) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(187 50% 15%) 1px, transparent 1px);
+}
