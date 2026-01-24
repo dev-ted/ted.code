@@ -39,20 +39,20 @@ export function HeroSection({ onContactClick }: HeroSectionProps) {
   }, [])
 
   return (
-    <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center px-4 md:px-12 py-20 md:py-0">
+    <section ref={sectionRef} id="hero" className="relative min-h-screen w-full max-w-none flex items-center justify-center py-20 md:py-0 overflow-hidden">
       <AnimatedNoise opacity={0.03} />
 
       {/* Container */}
-      <div className="w-full max-w-7xl mx-auto relative">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-12 relative">
         {/* Left vertical labels */}
         <div className="absolute left-0 md:-left-6 top-1/2 -translate-y-1/2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground -rotate-90 origin-left block whitespace-nowrap">
+          <span className="font-mono text-[10px] hidden md:block uppercase tracking-[0.3em] text-muted-foreground -rotate-90 origin-left  whitespace-nowrap">
             Digital Experience Designer
           </span>
         </div>
 
         {/* Main content */}
-        <div ref={contentRef} className="flex-1 w-full pl-0 md:pl-28">
+        <div ref={contentRef} className="flex-1 w-full md:pl-28">
         <SplitFlapAudioProvider>
           <div className="relative">
             <SplitFlapText text="TED.CODE" speed={80} />

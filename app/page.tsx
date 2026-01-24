@@ -20,7 +20,7 @@ export default function Page() {
       <SideNav />
       <div className="grid-bg fixed inset-0 opacity-30" aria-hidden="true" />
 
-      <div className="relative z-10">
+      <div className="relative z-10 w-full">
         <HeroSection onContactClick={() => setIsContactModalOpen(true)} />
         <SignalsSection onContactClick={() => setIsContactModalOpen(true)} />
         <WorkSection />

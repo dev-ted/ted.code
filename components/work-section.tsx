@@ -36,24 +36,15 @@ export function WorkSection() {
   const endIndex = startIndex + projectsPerPage
   const currentProjects = projects.slice(startIndex, endIndex)
 
-  // Assign grid spans based on position within the page (0-4)
-  // This ensures each page has the same grid layout structure
-  const getSpanForPosition = (position: number): string => {
-    const spans = [
-      "col-span-2 row-span-2", // Position 0: Large featured card
-      "col-span-1 row-span-1", // Position 1: Small card
-      "col-span-1 row-span-2", // Position 2: Tall card
-      "col-span-1 row-span-1", // Position 3: Small card
-      "col-span-2 row-span-1", // Position 4: Wide card
-    ]
-    return spans[position] || "col-span-1 row-span-1"
-  }
-
-  // Map projects with their assigned spans for the current page
-  const projectsWithSpans = currentProjects.map((project: any, index: number) => ({
-    ...project,
-    span: getSpanForPosition(index),
-  }))
+  // Predefined grid pattern - applies to each page consistently
+  // Pattern repeats: Large featured, Small, Tall, Small, Wide
+  const predefinedGridSpans = [
+    "col-span-2 row-span-2", // Position 0: Large featured card
+    "col-span-1 row-span-1", // Position 1: Small card
+    "col-span-1 row-span-2", // Position 2: Tall card
+    "col-span-1 row-span-1", // Position 3: Small card
+    "col-span-2 row-span-1", // Position 4: Wide card
+  ]
 
   useEffect(() => {
     if (!sectionRef.current || !headerRef.current || !gridRef.current) return
@@ -114,16 +105,20 @@ export function WorkSection() {
       {/* Asymmetric grid */}
       <div
         ref={gridRef}
-        className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[200px]"
+        className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 md:auto-rows-[200px]"
       >
-        {projectsWithSpans.map((experiment: any, index: number) => (
-          <WorkCard 
-            key={experiment._id} 
-            experiment={experiment} 
-            index={startIndex + index} 
-            persistHover={index === 0} 
-          />
-        ))}
+        {currentProjects.map((experiment: any, index: number) => {
+          const gridSpan = predefinedGridSpans[index % predefinedGridSpans.length]
+          return (
+            <WorkCard 
+              key={experiment._id} 
+              experiment={experiment} 
+              index={startIndex + index}
+              gridSpan={gridSpan}
+              persistHover={index === 0} 
+            />
+          )
+        })}
       </div>
 
       {/* Pagination */}
@@ -230,18 +225,19 @@ export function WorkSection() {
 function WorkCard({
   experiment,
   index,
+  gridSpan,
   persistHover = false,
 }: {
   experiment: {
     title: string
     medium: string
     description: string
-    span: string
     link?: string
     githubLink?: string
     contributorType?: "created" | "contributed"
   }
   index: number
+  gridSpan: string
   persistHover?: boolean
 }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -308,7 +304,9 @@ function WorkCard({
         <p
           className={cn(
             "font-mono text-xs text-muted-foreground leading-relaxed transition-all duration-500 max-w-[280px]",
-            isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+            "md:transition-all md:duration-500",
+            "opacity-100 translate-y-0 md:opacity-0 md:translate-y-2",
+            isActive && "md:opacity-100 md:translate-y-0",
           )}
         >
           {experiment.description}
@@ -362,9 +360,13 @@ function WorkCard({
     </>
   )
 
+  // Apply grid spans only on desktop (md and above)
+  // On mobile, cards stack naturally in single column
+  const gridSpanClasses = gridSpan.split(' ').map(span => `md:${span}`).join(' ')
+  
   const cardClassName = cn(
     "group relative border border-border/40 p-5 flex flex-col justify-between transition-all duration-500 overflow-hidden",
-    experiment.span,
+    gridSpanClasses,
     isActive && "border-accent/60",
     hasLink && "cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background",
     !hasLink && "cursor-default",
