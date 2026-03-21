@@ -31,7 +31,18 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
     gsap.ticker.lagSmoothing(0)
 
+    // Recalculate scroll dimensions after page load (fixes Lenis miscalculating height)
+    const handleLoad = () => {
+      requestAnimationFrame(() => lenis.resize())
+    }
+    if (document.readyState === "complete") {
+      handleLoad()
+    } else {
+      window.addEventListener("load", handleLoad)
+    }
+
     return () => {
+      window.removeEventListener("load", handleLoad)
       lenis.destroy()
       gsap.ticker.remove(lenis.raf)
     }
