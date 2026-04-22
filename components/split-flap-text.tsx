@@ -188,8 +188,8 @@ function SplitFlapChar({ char, index, animationKey, skipEntrance, speed, playCli
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const theme = useTheme()
-  const isDark = theme.theme === "dark"
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
 
   const tileDelay = 0.15 * index
 

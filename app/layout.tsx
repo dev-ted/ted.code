@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 
 import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/components/theme-provider"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Toaster } from "@/components/ui/toaster"
 import { SplashCursor } from "@/components/splash-cursor"
@@ -62,18 +63,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const themeInitScript = `(function(){try{var k="theme";var t=localStorage.getItem(k);var d=document.documentElement;var m=window.matchMedia("(prefers-color-scheme: dark)");var r=t==="light"||t==="dark"?t:m.matches?"dark":"light";d.classList.remove("light","dark");d.classList.add(r);}catch(e){}})();`
+
   return (
-    <html lang="en" className="bg-background">
+    <html lang="en" className="bg-background" suppressHydrationWarning>
+      <head>
+        <script
+          // Apply stored or system theme before first paint (avoids light → dark flash)
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+      </head>
       <body
         className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${ibmPlexMono.variable} font-sans antialiased overflow-x-hidden`}
       >
-        <ConvexClientProvider>
-          <div className="noise-overlay" aria-hidden="true" />
-          <SplashCursor />
-          <SmoothScroll>{children}</SmoothScroll>
-          <Toaster />
-          <Analytics />
-        </ConvexClientProvider>
+        <ThemeProvider>
+          <ConvexClientProvider>
+            <div className="noise-overlay" aria-hidden="true" />
+            <SplashCursor />
+            <SmoothScroll>{children}</SmoothScroll>
+            <Toaster />
+            <Analytics />
+          </ConvexClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
