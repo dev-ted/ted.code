@@ -1,28 +1,20 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useLayoutEffect } from "react"
+import { useTheme } from "next-themes"
 import { Moon, Sun, Monitor } from "lucide-react"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
 import Link from "next/link"
 import Image from "next/image"
 
 export function Navbar() {
-  const [theme, setTheme] = useState<"light" | "dark" | "system">("system")
+  const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | "system" | null
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-
-    const initialTheme = savedTheme || "system"
-    setTheme(initialTheme)
-
-    // Apply the actual theme based on system preference if theme is "system"
-    const actualTheme = initialTheme === "system" ? (prefersDark ? "dark" : "light") : initialTheme
-    document.documentElement.classList.remove("light", "dark")
-    document.documentElement.classList.add(actualTheme)
+  useLayoutEffect(() => {
+    setMounted(true)
   }, [])
 
   useEffect(() => {
@@ -33,20 +25,6 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const toggleTheme = () => {
-    const themeOrder: Array<"light" | "dark" | "system"> = ["light", "dark", "system"]
-    const currentIndex = themeOrder.indexOf(theme)
-    const newTheme = themeOrder[(currentIndex + 1) % themeOrder.length]
-    setTheme(newTheme)
-
-    // Apply the actual theme
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-    const actualTheme = newTheme === "system" ? (prefersDark ? "dark" : "light") : newTheme
-    document.documentElement.classList.remove("light", "dark")
-    document.documentElement.classList.add(actualTheme)
-    localStorage.setItem("theme", newTheme)
-  }
 
   const navLinks = [
     { id: "hero", label: "Home" },
@@ -62,6 +40,8 @@ export function Navbar() {
       element.scrollIntoView({ behavior: "smooth" })
     }
   }
+
+  const activeTheme = mounted ? (theme ?? "system") : "system"
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-100 flex justify-center pt-2 md:pt-6 px-4">
@@ -96,43 +76,27 @@ export function Navbar() {
 
           <div className="flex items-center gap-1 border border-border/50 rounded-xl p-1 bg-background/50">
             <button
-              onClick={() => {
-                setTheme("light")
-                document.documentElement.classList.remove("light", "dark")
-                document.documentElement.classList.add("light")
-                localStorage.setItem("theme", "light")
-              }}
+              onClick={() => setTheme("light")}
               className={`relative flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 ${
-                theme === "light" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
+                activeTheme === "light" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
               aria-label="Light mode"
             >
               <Sun className="w-4 h-4" />
             </button>
             <button
-              onClick={() => {
-                setTheme("dark")
-                document.documentElement.classList.remove("light", "dark")
-                document.documentElement.classList.add("dark")
-                localStorage.setItem("theme", "dark")
-              }}
+              onClick={() => setTheme("dark")}
               className={`relative flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 ${
-                theme === "dark" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
+                activeTheme === "dark" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
               aria-label="Dark mode"
             >
               <Moon className="w-4 h-4" />
             </button>
             <button
-              onClick={() => {
-                setTheme("system")
-                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-                document.documentElement.classList.remove("light", "dark")
-                document.documentElement.classList.add(prefersDark ? "dark" : "light")
-                localStorage.setItem("theme", "system")
-              }}
+              onClick={() => setTheme("system")}
               className={`relative flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 ${
-                theme === "system" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
+                activeTheme === "system" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
               aria-label="System mode"
             >
