@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useQuery } from "convex/react"
 
 import { api } from "@/convex/_generated/api"
+import type { Doc } from "@/convex/_generated/dataModel"
 import {
   Pagination,
   PaginationContent,
@@ -107,7 +108,7 @@ export function WorkSection() {
         ref={gridRef}
         className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 md:auto-rows-[200px]"
       >
-        {currentProjects.map((experiment: any, index: number) => {
+        {currentProjects.map((experiment: Doc<"projects">, index: number) => {
           const gridSpan = predefinedGridSpans[index % predefinedGridSpans.length]
           return (
             <WorkCard 
@@ -228,14 +229,7 @@ function WorkCard({
   gridSpan,
   persistHover = false,
 }: {
-  experiment: {
-    title: string
-    medium: string
-    description: string
-    link?: string
-    githubLink?: string
-    contributorType?: "created" | "contributed"
-  }
+  experiment: Doc<"projects">
   index: number
   gridSpan: string
   persistHover?: boolean
@@ -380,15 +374,16 @@ function WorkCard({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        <CardContent />
+        {/* After content in DOM + higher z-index so clicks hit the link (CardContent uses z-10). */}
         <Link
           href={experiment.link!}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute inset-0 z-10"
+          className="absolute inset-0 z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label={`Visit ${experiment.title} website`}
           tabIndex={0}
         />
-        <CardContent />
       </article>
     )
   }
