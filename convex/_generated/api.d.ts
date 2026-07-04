@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as admins from "../admins.js";
+import type * as lib_auth from "../lib/auth.js";
 import type * as projects from "../projects.js";
 
 import type {
@@ -17,6 +19,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  admins: typeof admins;
+  "lib/auth": typeof lib_auth;
   projects: typeof projects;
 }>;
 

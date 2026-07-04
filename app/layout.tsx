@@ -1,11 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
 
+import { ClerkProvider } from "@clerk/nextjs"
+import { shadcn } from "@clerk/ui/themes"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Toaster } from "@/components/ui/toaster"
-import { SplashCursor } from "@/components/splash-cursor"
+import { PortfolioSplashCursor } from "@/components/portfolio-splash-cursor"
 import { ConvexClientProvider } from "./ConvexClientProvider"
 import "./globals.css"
 
@@ -76,15 +78,17 @@ export default function RootLayout({
       <body
         className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${ibmPlexMono.variable} font-sans antialiased overflow-x-hidden`}
       >
-        <ThemeProvider>
-          <ConvexClientProvider>
-            <div className="noise-overlay" aria-hidden="true" />
-            <SplashCursor />
-            <SmoothScroll>{children}</SmoothScroll>
-            <Toaster />
-            <Analytics />
-          </ConvexClientProvider>
-        </ThemeProvider>
+        <ClerkProvider appearance={{ theme: shadcn }}>
+          <ThemeProvider>
+            <ConvexClientProvider>
+              <div className="noise-overlay" aria-hidden="true" />
+              <PortfolioSplashCursor />
+              <SmoothScroll>{children}</SmoothScroll>
+              <Toaster />
+              <Analytics />
+            </ConvexClientProvider>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   )

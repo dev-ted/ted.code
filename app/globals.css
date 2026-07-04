@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@clerk/ui/themes/shadcn.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -12,7 +13,7 @@
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(0 0% 0%);
   --primary: rgb(182, 19, 98);
-  --primary-foreground: rgb(10, 3, 3);
+  --primary-foreground: hsl(0 0% 100%);
   --secondary: rgb(5, 1, 1);
   --secondary-foreground: hsl(0 0% 0%);
   --muted: hsl(187 12% 94%);
@@ -185,7 +186,7 @@
   --popover: hsl(0 0% 12%);
   --popover-foreground: hsl(0 0% 100%);
   --primary: rgb(184, 19, 99);
-  --primary-foreground: hsl(0 0% 7%);
+  --primary-foreground: hsl(0 0% 100%);
   --secondary: rgb(219, 211, 211);
   --secondary-foreground: hsl(0 0% 100%);
   --muted: hsl(0 0% 15%);

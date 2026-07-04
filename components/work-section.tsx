@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { cn } from "@/lib/utils"
+import { spanToGridClasses } from "@/lib/portfolio-grid"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Github } from "lucide-react"
@@ -30,22 +31,12 @@ export function WorkSection() {
   const projectsPerPage = 5
 
   // Fetch projects from Convex
-  const projects = useQuery(api.projects.getAll) || []
+  const projects = useQuery(api.projects.listPublished) || []
 
   const totalPages = Math.ceil(projects.length / projectsPerPage)
   const startIndex = (currentPage - 1) * projectsPerPage
   const endIndex = startIndex + projectsPerPage
   const currentProjects = projects.slice(startIndex, endIndex)
-
-  // Predefined grid pattern - applies to each page consistently
-  // Pattern repeats: Large featured, Small, Tall, Small, Wide
-  const predefinedGridSpans = [
-    "col-span-2 row-span-2", // Position 0: Large featured card
-    "col-span-1 row-span-1", // Position 1: Small card
-    "col-span-1 row-span-2", // Position 2: Tall card
-    "col-span-1 row-span-1", // Position 3: Small card
-    "col-span-2 row-span-1", // Position 4: Wide card
-  ]
 
   useEffect(() => {
     if (!sectionRef.current || !headerRef.current || !gridRef.current) return
@@ -108,18 +99,15 @@ export function WorkSection() {
         ref={gridRef}
         className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 md:auto-rows-[200px]"
       >
-        {currentProjects.map((experiment: Doc<"projects">, index: number) => {
-          const gridSpan = predefinedGridSpans[index % predefinedGridSpans.length]
-          return (
+        {currentProjects.map((experiment: Doc<"projects">, index: number) => (
             <WorkCard 
               key={experiment._id} 
               experiment={experiment} 
               index={startIndex + index}
-              gridSpan={gridSpan}
+              gridSpan={experiment.span}
               persistHover={index === 0} 
             />
-          )
-        })}
+          ))}
       </div>
 
       {/* Pagination */}
@@ -354,9 +342,7 @@ function WorkCard({
     </>
   )
 
-  // Apply grid spans only on desktop (md and above)
-  // On mobile, cards stack naturally in single column
-  const gridSpanClasses = gridSpan.split(' ').map(span => `md:${span}`).join(' ')
+  const gridSpanClasses = spanToGridClasses(gridSpan)
   
   const cardClassName = cn(
     "group relative border border-border/40 p-5 flex flex-col justify-between transition-all duration-500 overflow-hidden",
