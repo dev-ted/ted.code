@@ -1,28 +1,39 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import {
+  clerkMiddleware,
+  createRouteMatcher,
+} from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import {
+  getAllowedAdminEmails,
+  getSessionEmail,
+} from "@/lib/admin/clerk-session";
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isAdminLoginRoute = createRouteMatcher(["/admin/login(.*)"]);
 
-  // Allow access to login page
-  if (pathname.startsWith('/admin/login')) {
-    return NextResponse.next()
+export default clerkMiddleware(async (auth, request) => {
+  if (!isAdminRoute(request) || isAdminLoginRoute(request)) {
+    return;
   }
 
-  // Check if user is authenticated
-  const authCookie = request.cookies.get('admin-auth')
-  
-  if (pathname.startsWith('/admin')) {
-    if (!authCookie || authCookie.value !== 'authenticated') {
-      // Redirect to login page
-      const loginUrl = new URL('/admin/login', request.url)
-      loginUrl.searchParams.set('redirect', pathname)
-      return NextResponse.redirect(loginUrl)
-    }
-  }
+  const session = await auth.protect();
+  const email = await getSessionEmail(
+    session.userId,
+    session.sessionClaims as Record<string, unknown> | null | undefined
+  );
+  const allowed = getAllowedAdminEmails();
 
-  return NextResponse.next()
-}
+  if (!email || !allowed.includes(email.toLowerCase())) {
+    const loginUrl = new URL("/admin/login", request.url);
+    loginUrl.searchParams.set("error", "unauthorized");
+    return NextResponse.redirect(loginUrl);
+  }
+});
 
 export const config = {
-  matcher: '/admin/:path*',
-}
+  matcher: [
+    "/admin/:path*",
+    "/(api|trpc)(.*)",
+    "/__clerk/:path*",
+  ],
+};
